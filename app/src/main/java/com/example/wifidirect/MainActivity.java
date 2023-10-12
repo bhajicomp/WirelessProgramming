@@ -1,47 +1,37 @@
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.IntentFilter;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
+...
 
-public class MainActivity extends AppCompatActivity {
-    private WifiP2pManager mManager;
-    private WifiP2pManager.Channel mChannel;
-    private BroadcastReceiver mReceiver;
-    private IntentFilter mIntentFilter;
+// Form fields
+EditText userNameField;
+EditText itemQuantityField;
+EditText itemNameField;
+Button saveButton;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+// Check if the device is connected to a WiFi Direct Group
+if (wifiDirectBroadcastReceiver.isConnectedToWiFiDirectGroup()) {
+    // Show the marketplace view
+    marketplaceView.setVisibility(View.VISIBLE);
+    // Update the marketplace view
+    updateMarketplaceView();
+} else {
+    // Hide the marketplace view
+    marketplaceView.setVisibility(View.GONE);
+}
 
-        // Initialize WiFi Direct manager and channel
-        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel = mManager.initialize(this, getMainLooper(), null);
+...
 
-        // Initialize broadcast receiver and intent filter
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+// Method to update the marketplace view
+private void updateMarketplaceView() {
+    // Get the marketplace data
+    MarketplaceDataReceiver marketplaceDataReceiver = new MarketplaceDataReceiver();
+    List<MarketplaceItem> marketplaceItems = marketplaceDataReceiver.getMarketplaceData();
 
-        // ... rest of the code ...
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(mReceiver, mIntentFilter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(mReceiver);
+    // Update the marketplace view with the data
+    for (MarketplaceItem item : marketplaceItems) {
+        // Create a new marketplace item view
+        MarketplaceItemView itemView = new MarketplaceItemView(this, item);
+        // Add the item view to the marketplace view
+        marketplaceView.addView(itemView);
     }
 }
+
+...

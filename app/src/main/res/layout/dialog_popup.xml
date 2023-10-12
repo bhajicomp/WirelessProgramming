@@ -1,0 +1,8 @@
+<!-- This layout will contain the UI for the DialogPopup. It will dynamically change based on the device's connectivity status. -->
+<!-- This is a placeholder and needs to be replaced with the actual layout. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+</LinearLayout>
